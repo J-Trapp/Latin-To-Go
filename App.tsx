@@ -15,10 +15,10 @@ import ScoreScreen from "./screens/ScoreScreen";
 export type RootStackParamList = {
   Home: undefined;
   Numbers: { category: string };
-  // Animals: undefined;
-  // Months: undefined;
-  // Weekdays: undefined;
-  // Colors: undefined;
+  Animals: undefined;
+  Months: undefined;
+  Weekdays: undefined;
+  Colors: undefined;
   Score: {
     rightAnswers: number;
     wrongAnswers: number;
