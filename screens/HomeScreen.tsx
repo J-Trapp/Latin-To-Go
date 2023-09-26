@@ -1,50 +1,62 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { RootStackParamList } from "../App";
 
-type ButtonType = {
-  label: string;
-  screen: keyof RootStackParamList;
-  color: string;
-};
-
-export type Props = NativeStackScreenProps<RootStackParamList, "Home">;
+type Props = StackScreenProps<RootStackParamList, "Home">;
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
-  const navigateToScreen = (screen: keyof RootStackParamList) => {
-    navigation.navigate(screen);
+  const navigateToScreen = (screenName: keyof RootStackParamList) => {
+    switch (screenName) {
+      case "Numbers":
+        navigation.navigate("Numbers", { category: "Numbers" });
+        break;
+      case "Animals":
+        navigation.navigate("Animals");
+        break;
+      case "Months":
+        navigation.navigate("Months");
+        break;
+      case "Weekdays":
+        navigation.navigate("Weekdays");
+        break;
+      case "Colors":
+        navigation.navigate("Colors");
+        break;
+      default:
+        break;
+    }
   };
 
+  const circleButtons: {
+    label: string;
+    screen: keyof RootStackParamList;
+    color: string;
+  }[] = [
+    { label: "Numbers", screen: "Numbers", color: "#3498db" },
+    { label: "Animals", screen: "Animals", color: "#e74c3c" },
+    { label: "Months", screen: "Months", color: "#2ecc71" },
+    { label: "Weekdays", screen: "Weekdays", color: "#f1c40f" },
+    { label: "Colors", screen: "Colors", color: "#9b59b6" },
+  ];
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>Latin-To-Go</Text>
       <View style={styles.buttonContainer}>
         {circleButtons.map((button, index) => (
-          <Pressable
+          <TouchableOpacity
             key={index}
-            style={({ pressed }) => [
-              styles.button,
-              { backgroundColor: button.color },
-              pressed ? styles.pressedButton : null,
-            ]}
+            style={[styles.button, { backgroundColor: button.color }]}
             onPress={() => navigateToScreen(button.screen)}
           >
             <Text style={styles.buttonText}>{button.label}</Text>
-          </Pressable>
+          </TouchableOpacity>
         ))}
       </View>
-    </ScrollView>
+    </View>
   );
 };
-
-const circleButtons: ButtonType[] = [
-  { label: "Numbers", screen: "Numbers", color: "#3498db" },
-  { label: "Animals", screen: "Numbers", color: "#e74c3c" },
-  { label: "Months", screen: "Numbers", color: "#2ecc71" },
-  { label: "Weekdays", screen: "Numbers", color: "#f1c40f" },
-  { label: "Colors", screen: "Numbers", color: "#9b59b6" },
-];
 
 const styles = StyleSheet.create({
   container: {
@@ -69,12 +81,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
   },
-  pressedButton: {
-    opacity: 0.5,
-  },
   buttonText: {
     fontSize: 18,
-    color: "black",
+    color: "white",
     fontFamily: "serif",
     fontWeight: "bold",
   },
