@@ -10,14 +10,19 @@ import NumbersScreen from "./screens/NumbersScreen";
 // import MonthsScreen from "./screens/MonthsScreen";
 // import WeekdaysScreen from "./screens/WeekdaysScreen";
 // import ColorsScreen from "./screens/ColorsScreen";
+import ScoreScreen from "./screens/ScoreScreen";
 
 export type RootStackParamList = {
   Home: undefined;
   Numbers: { category: string };
-  Animals: undefined;
-  Months: undefined;
-  Weekdays: undefined;
-  Colors: undefined;
+  // Animals: undefined;
+  // Months: undefined;
+  // Weekdays: undefined;
+  // Colors: undefined;
+  Score: {
+    rightAnswers: number;
+    wrongAnswers: number;
+  };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -33,7 +38,8 @@ export default function App() {
           {/* <Stack.Screen name="Animals" component={AnimalsScreen} />
           <Stack.Screen name="Months" component={MonthsScreen} />
           <Stack.Screen name="Weekdays" component={WeekdaysScreen} />
-          <Stack.Screen name="Colors" component={ColorsScreen} /> */}
+          <Stack.Screen name="Colors" component={ColorsScreen} />  */}
+          <Stack.Screen name="Score" component={ScoreScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

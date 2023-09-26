@@ -1,4 +1,5 @@
 import { StackScreenProps } from "@react-navigation/stack";
+import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
@@ -7,40 +8,75 @@ import { numberCardsData } from "../cards/NumberCardsData";
 
 type Props = StackScreenProps<RootStackParamList, "Numbers">;
 
+const triggerSelectionVibration = async () => {
+  await Haptics.selectionAsync();
+};
+
 const NumbersScreen: React.FC<Props> = ({ navigation, route }) => {
   const { category } = route.params;
-  const [userAnswer, setUserAnswer] = useState("");
+  const [userAnswer, setUserAnswer] = useState(
+    Array(numberCardsData.length).fill("")
+  );
+
   const [isFlipped, setIsFlipped] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0); // Track the current card index
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
-  const cards = numberCardsData; // Assign card data to a variable
+  const cards = numberCardsData;
 
   const checkAnswer = () => {
     setIsFlipped(true);
 
+    const currentUserAnswer = userAnswer[currentCardIndex];
+
     if (
-      userAnswer.toLowerCase() === cards[currentCardIndex].latin.toLowerCase()
+      currentUserAnswer.toLowerCase() ===
+      cards[currentCardIndex].latin.toLowerCase()
     ) {
       setFeedback("Correct!");
     } else {
       setFeedback("Wrong!");
+      triggerWrongAnswerVibration();
     }
+  };
+
+  const triggerWrongAnswerVibration = async () => {
+    await Haptics.selectionAsync(); // Trigger haptic feedback for wrong answer
   };
 
   const goToNextCard = () => {
     if (currentCardIndex < cards.length - 1) {
       setCurrentCardIndex(currentCardIndex + 1);
-      setIsFlipped(false); // Reset card flip state
-      setUserAnswer(""); // Clear user's answer
-      setFeedback(null); // Clear feedback
+      setIsFlipped(false);
+      setFeedback(null);
     } else {
-      console.log("All cards completed!");
+      let correctCount = 0;
+      let incorrectCount = 0;
+
+      for (let i = 0; i < cards.length; i++) {
+        if (
+          userAnswer[i] &&
+          userAnswer[i].toLowerCase() === cards[i].latin.toLowerCase()
+        ) {
+          correctCount++;
+        } else {
+          incorrectCount++;
+        }
+      }
+
+      navigation.navigate("Score", {
+        rightAnswers: correctCount,
+        wrongAnswers: incorrectCount,
+      });
     }
   };
 
   const backgroundColor =
-    feedback === "Correct!" ? "green" : feedback === "Wrong!" ? "red" : "white";
+    feedback === "Correct!"
+      ? "lightgreen"
+      : feedback === "Wrong!"
+      ? "red"
+      : "lavender";
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
@@ -59,8 +95,12 @@ const NumbersScreen: React.FC<Props> = ({ navigation, route }) => {
           <TextInput
             style={styles.input}
             placeholder="Enter Latin translation"
-            onChangeText={(text) => setUserAnswer(text)}
-            value={userAnswer}
+            onChangeText={(text) => {
+              const updatedAnswers = [...userAnswer];
+              updatedAnswers[currentCardIndex] = text;
+              setUserAnswer(updatedAnswers);
+            }}
+            value={userAnswer[currentCardIndex]}
           />
           <Button mode="contained" onPress={checkAnswer}>
             Check
@@ -82,6 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#D8BFD8",
   },
   categoryText: {
     fontSize: 18,
@@ -115,7 +156,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   input: {
-    width: 200,
+    width: 230,
     borderWidth: 1,
     borderColor: "gray",
     padding: 8,
