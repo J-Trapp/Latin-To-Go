@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     paddingTop: 40,
+    backgroundColor: "lavender",
   },
   title: {
     fontSize: 24,

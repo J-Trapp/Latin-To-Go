@@ -1,7 +1,10 @@
+import { FontAwesome } from "@expo/vector-icons"; // Assuming you want to use FontAwesome icons
+import { AVPlaybackSource, Audio } from "expo-av";
 import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
+import audioMapping from "../config/audioMapping"; // Adjust the import path as needed
 
 type CardType = {
   id: number;
@@ -15,6 +18,10 @@ type FlashcardScreenProps = {
   category: string;
 };
 
+type AudioMapping = {
+  [key: string]: string;
+};
+
 const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
   navigation,
   cards,
@@ -24,9 +31,28 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
   const [isFlipped, setIsFlipped] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const triggerSelectionVibration = async () => {
-    await Haptics.selectionAsync();
+  const playLatinWordAudio = async (latinWord: string) => {
+    if (sound) {
+      try {
+        // Use the audioMapping to get the audio file path for the Latin word
+        const audioPath = audioMapping[latinWord];
+        if (audioPath) {
+          const source: AVPlaybackSource = {
+            uri: audioPath, // Assuming audioPath is a valid URI
+          };
+
+          await sound.loadAsync(source); // Pass the source object
+          await sound.playAsync();
+        } else {
+          console.error(`Audio file not found for Latin word: ${latinWord}`);
+        }
+      } catch (error) {
+        console.error("Error playing audio", error);
+      }
+    }
   };
 
   const triggerWrongAnswerVibration = async () => {
@@ -93,30 +119,37 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
               : cards[currentCardIndex].english}
           </Text>
         </TouchableOpacity>
-      </Card>
-      {!isFlipped && (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Latin translation"
-            onChangeText={(text) => {
-              const updatedAnswers = [...userAnswer];
-              updatedAnswers[currentCardIndex] = text;
-              setUserAnswer(updatedAnswers);
-            }}
-            value={userAnswer[currentCardIndex]}
-          />
-          <Button mode="contained" onPress={checkAnswer}>
-            Check
+        {!isFlipped && (
+          <>
+            <TouchableOpacity
+              onPress={
+                () => playLatinWordAudio(cards[currentCardIndex].latin) // Pass the Latin word to play
+              }
+            >
+              <FontAwesome name="volume-up" size={24} color="black" />
+            </TouchableOpacity>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Latin translation"
+              onChangeText={(text) => {
+                const updatedAnswers = [...userAnswer];
+                updatedAnswers[currentCardIndex] = text;
+                setUserAnswer(updatedAnswers);
+              }}
+              value={userAnswer[currentCardIndex]}
+            />
+            <Button mode="contained" onPress={checkAnswer}>
+              Check
+            </Button>
+          </>
+        )}
+        {isFlipped && <Text style={styles.feedback}>{feedback}</Text>}
+        {feedback && (
+          <Button mode="contained" onPress={goToNextCard}>
+            Continue
           </Button>
-        </>
-      )}
-      {isFlipped && <Text style={styles.feedback}>{feedback}</Text>}
-      {feedback && (
-        <Button mode="contained" onPress={goToNextCard}>
-          Continue
-        </Button>
-      )}
+        )}
+      </Card>
     </View>
   );
 };

@@ -1,4 +1,3 @@
-// App.tsx
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
@@ -11,6 +10,7 @@ import MonthsScreen from "./screens/MonthsScreen";
 import NumbersScreen from "./screens/NumbersScreen";
 import ScoreScreen from "./screens/ScoreScreen";
 import WeekdaysScreen from "./screens/WeekdaysScreen";
+// import { initializeNotifications } from "./utils/NotificationManager";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -28,9 +28,10 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  // initializeNotifications();
   return (
     <SafeAreaProvider>
-      <StatusBar style="auto" />
+      <StatusBar style="auto" backgroundColor="lavender" />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />
