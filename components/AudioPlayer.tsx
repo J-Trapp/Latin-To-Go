@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "react-native";
 
 interface AudioPlayerProps {
-  soundFile: string; // The sound file path in assets (e.g., 'assets/sound.mp3')
+  soundFile: string;
 }
 
 export default function AudioPlayer({ soundFile }: AudioPlayerProps) {

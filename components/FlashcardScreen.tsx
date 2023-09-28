@@ -1,10 +1,11 @@
-import { FontAwesome } from "@expo/vector-icons"; // Assuming you want to use FontAwesome icons
+import { FontAwesome } from "@expo/vector-icons";
 import { AVPlaybackSource, Audio } from "expo-av";
 import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
-import audioMapping from "../config/audioMapping"; // Adjust the import path as needed
+import audioMapping from "../config/audioMapping";
+import NotificationManager from "../utils/NotificationManager";
 
 type CardType = {
   id: number;
@@ -18,10 +19,6 @@ type FlashcardScreenProps = {
   category: string;
 };
 
-type AudioMapping = {
-  [key: string]: string;
-};
-
 const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
   navigation,
   cards,
@@ -31,20 +28,19 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
   const [isFlipped, setIsFlipped] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [sound] = useState<Audio.Sound | null>(null);
+  const [allAnswersCorrect, setAllAnswersCorrect] = useState(false);
 
   const playLatinWordAudio = async (latinWord: string) => {
     if (sound) {
       try {
-        // Use the audioMapping to get the audio file path for the Latin word
-        const audioPath = audioMapping[latinWord];
+        const audioPath = audioMapping[latinWord as keyof typeof audioMapping];
         if (audioPath) {
           const source: AVPlaybackSource = {
-            uri: audioPath, // Assuming audioPath is a valid URI
+            uri: audioPath,
           };
 
-          await sound.loadAsync(source); // Pass the source object
+          await sound.loadAsync(source);
           await sound.playAsync();
         } else {
           console.error(`Audio file not found for Latin word: ${latinWord}`);
@@ -72,6 +68,17 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
       setFeedback("Wrong!");
       triggerWrongAnswerVibration();
     }
+
+    const areAllAnswersCorrect = userAnswer.every(
+      (answer, index) =>
+        answer.toLowerCase() === cards[index].latin.toLowerCase()
+    );
+
+    if (areAllAnswersCorrect) {
+      // Send congratulatory notification and set allAnswersCorrect to true
+      NotificationManager.sendCongratulatoryNotification();
+      setAllAnswersCorrect(true);
+    }
   };
 
   const goToNextCard = () => {
@@ -92,6 +99,15 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
         } else {
           incorrectCount++;
         }
+      }
+
+      const areAllAnswersCorrect = correctCount === cards.length;
+
+      if (correctCount === cards.length && incorrectCount === 0) {
+        NotificationManager.sendCongratulatoryNotification();
+        setAllAnswersCorrect(true);
+      } else {
+        setAllAnswersCorrect(false);
       }
 
       navigation.navigate("Score", {
@@ -122,9 +138,7 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
         {!isFlipped && (
           <>
             <TouchableOpacity
-              onPress={
-                () => playLatinWordAudio(cards[currentCardIndex].latin) // Pass the Latin word to play
-              }
+              onPress={() => playLatinWordAudio(cards[currentCardIndex].latin)}
             >
               <FontAwesome name="volume-up" size={24} color="black" />
             </TouchableOpacity>

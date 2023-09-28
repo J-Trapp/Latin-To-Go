@@ -1,15 +1,15 @@
-import Decem from "../assets/Decem.mp3";
-import Duo from "../assets/Duo.mp3";
-import Novem from "../assets/Novem.mp3";
-import Octo from "../assets/Octo.mp3";
-import Quattuor from "../assets/Quattuor.mp3";
-import Quinque from "../assets/Quinque.mp3";
-import Septem from "../assets/Septem.mp3";
-import Sex from "../assets/Sex.mp3";
-import Tres from "../assets/Tres.mp3";
-import Unus from "../assets/Unus.mp3";
+const Decem = require("../assets/Decem.mp3");
+const Duo = require("../assets/Duo.mp3");
+const Novem = require("../assets/Novem.mp3");
+const Octo = require("../assets/Octo.mp3");
+const Quattuor = require("../assets/Quattuor.mp3");
+const Quinque = require("../assets/Quinque.mp3");
+const Septem = require("../assets/Septem.mp3");
+const Sex = require("../assets/Sex.mp3");
+const Tres = require("../assets/Tres.mp3");
+const Unus = require("../assets/Unus.mp3");
 
-const audioMapping: { [key: string]: any } = {
+const audioMapping = {
   unus: Unus,
   duo: Duo,
   tres: Tres,

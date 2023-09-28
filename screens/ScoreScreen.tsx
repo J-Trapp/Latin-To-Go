@@ -1,8 +1,9 @@
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { RootStackParamList } from "../App";
+import NotificationManager from "../utils/NotificationManager";
 
 type ScoreScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -18,6 +19,22 @@ type ScoreScreenProps = {
 
 const ScoreScreen: React.FC<ScoreScreenProps> = ({ navigation, route }) => {
   const { rightAnswers, wrongAnswers } = route.params;
+  const [showCongratulatoryMessage, setShowCongratulatoryMessage] =
+    useState(false);
+  const [showPracticeMessage, setShowPracticeMessage] = useState(false);
+
+  useEffect(() => {
+    // Check if the user has completed the category
+    const userCompletedCategory = rightAnswers === rightAnswers + wrongAnswers;
+
+    // If the user completed the category, send a congratulatory notification
+    if (userCompletedCategory) {
+      NotificationManager.sendCongratulatoryNotification();
+      setShowCongratulatoryMessage(true);
+    } else {
+      setShowPracticeMessage(true);
+    }
+  }, [rightAnswers, wrongAnswers]);
 
   return (
     <View style={styles.container}>
@@ -32,6 +49,22 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({ navigation, route }) => {
         <Text style={styles.scoreValue}>Right Answers: {rightAnswers}</Text>
         <Text style={styles.scoreValue}>Wrong Answers: {wrongAnswers}</Text>
       </View>
+
+      {showCongratulatoryMessage && (
+        <View style={styles.congratulatoryMessageContainer}>
+          <Text style={styles.congratulatoryMessage}>
+            {NotificationManager.getCongratulatoryMessage()}
+          </Text>
+        </View>
+      )}
+
+      {showPracticeMessage && (
+        <View style={styles.practiceMessageContainer}>
+          <Text style={styles.practiceMessage}>
+            {NotificationManager.getPracticeMessage()}
+          </Text>
+        </View>
+      )}
 
       <View style={{ alignItems: "center", marginTop: 20 }}>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
@@ -48,7 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    padding: 20, // Adjust padding for spacing
+    padding: 20,
   },
   starContainer: {
     flexDirection: "row",
@@ -71,8 +104,28 @@ const styles = StyleSheet.create({
     color: "yellow",
     marginBottom: 10,
   },
-  buttonContainer: {
+  congratulatoryMessageContainer: {
     marginTop: 20,
+    backgroundColor: "green",
+    padding: 10,
+    borderRadius: 5,
+  },
+  congratulatoryMessage: {
+    color: "white",
+    fontSize: 18,
+    textAlign: "center",
+  },
+
+  practiceMessageContainer: {
+    marginTop: 20,
+    backgroundColor: "red",
+    padding: 10,
+    borderRadius: 5,
+  },
+  practiceMessage: {
+    color: "white",
+    fontSize: 18,
+    textAlign: "center",
   },
 });
 

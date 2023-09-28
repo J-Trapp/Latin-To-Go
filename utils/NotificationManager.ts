@@ -1,37 +1,47 @@
-// import * as Notifications from "expo-notifications";
-// import * as Permissions from "expo-permissions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Notifications from "expo-notifications";
 
-// async function registerForPushNotificationsAsync() {
-//   const { status: existingStatus } = await Permissions.getAsync(
-//     Permissions.NOTIFICATIONS
-//   );
+const generateDeviceId = async () => {
+  let deviceId = await AsyncStorage.getItem("device_id");
 
-//   if (existingStatus !== "granted") {
-//     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  if (!deviceId) {
+    deviceId = Math.random().toString(36).substring(7);
+    await AsyncStorage.setItem("device_id", deviceId);
+  }
 
-//     if (status !== "granted") {
-//       console.error("Permission to receive notifications was denied");
-//       return;
-//     }
-//   }
+  return deviceId;
+};
 
-//   const tokenData = await Notifications.getExpoPushTokenAsync();
-//   const expoPushToken = tokenData.data;
+const sendCongratulatoryNotification = async () => {
+  const deviceId = await generateDeviceId();
+  const message = {
+    to: deviceId,
+    sound: "default",
+    title: "Congratulations!",
+    body: "You completed the category successfully!",
+  };
 
-//   // Save the expoPushToken in your app's state or send it to your server
-//   // for later use when sending notifications.
+  try {
+    await Notifications.scheduleNotificationAsync({
+      content: message,
+      trigger: null,
+    });
+    console.log("Push notification sent:", message);
+  } catch (error) {
+    console.error("Error sending push notification:", error);
+  }
+};
 
-//   console.log("Expo Push Token:", expoPushToken);
-// }
+const getCongratulatoryMessage = () => {
+  return "Congratulations! You got all the answers right in this category!";
+};
 
-// export async function initializeNotifications() {
-//   Notifications.setNotificationHandler({
-//     handleNotification: async () => ({
-//       shouldShowAlert: true,
-//       shouldPlaySound: false,
-//       shouldSetBadge: false,
-//     }),
-//   });
+const getPracticeMessage = () => {
+  return "You better practice some more to get all the answers right!";
+};
 
-//   registerForPushNotificationsAsync();
-// }
+export default {
+  sendCongratulatoryNotification,
+  getCongratulatoryMessage,
+  getPracticeMessage,
+};
