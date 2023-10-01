@@ -12,16 +12,16 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         navigation.navigate("Numbers", { category: "Numbers" });
         break;
       case "Animals":
-        navigation.navigate("Animals");
+        navigation.navigate("Animals", { category: "Animals" });
         break;
       case "Months":
-        navigation.navigate("Months");
+        navigation.navigate("Months", { category: "Months" });
         break;
       case "Weekdays":
-        navigation.navigate("Weekdays");
+        navigation.navigate("Weekdays", { category: "Weekdays" });
         break;
       case "Colors":
-        navigation.navigate("Colors");
+        navigation.navigate("Colors", { category: "Colors" });
         break;
       default:
         break;

@@ -1,21 +1,21 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { AVPlaybackSource, Audio } from "expo-av";
+import { Audio } from "expo-av";
 import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
-import audioMapping from "../config/audioMapping";
+import audioMapping, { LatinWord } from "../config/audioMapping";
 import NotificationManager from "../utils/NotificationManager";
 
 type CardType = {
   id: number;
   english: string;
-  latin: string;
+  latin: LatinWord;
 };
 
 type FlashcardScreenProps = {
   navigation: any;
-  cards: CardType[];
+  cards: readonly CardType[];
   category: string;
 };
 
@@ -28,26 +28,22 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
   const [isFlipped, setIsFlipped] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [sound] = useState<Audio.Sound | null>(null);
-  const [allAnswersCorrect, setAllAnswersCorrect] = useState(false);
+  // const [sound] = useState<Audio.Sound | null>(null);
+  const [, setAllAnswersCorrect] = useState(false);
 
-  const playLatinWordAudio = async (latinWord: string) => {
-    if (sound) {
-      try {
-        const audioPath = audioMapping[latinWord as keyof typeof audioMapping];
-        if (audioPath) {
-          const source: AVPlaybackSource = {
-            uri: audioPath,
-          };
+  const playLatinWordAudio = async (latinWord: LatinWord) => {
+    try {
+      const audioPath = audioMapping[latinWord];
 
-          await sound.loadAsync(source);
-          await sound.playAsync();
-        } else {
-          console.error(`Audio file not found for Latin word: ${latinWord}`);
-        }
-      } catch (error) {
-        console.error("Error playing audio", error);
+      if (audioPath) {
+        const { sound } = await Audio.Sound.createAsync(audioPath);
+
+        await sound.playAsync();
+      } else {
+        console.error(`Audio file not found for Latin word: ${latinWord}`);
       }
+    } catch (error) {
+      console.error("Error playing audio", error);
     }
   };
 
@@ -100,8 +96,6 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
           incorrectCount++;
         }
       }
-
-      const areAllAnswersCorrect = correctCount === cards.length;
 
       if (correctCount === cards.length && incorrectCount === 0) {
         NotificationManager.sendCongratulatoryNotification();

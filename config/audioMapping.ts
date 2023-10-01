@@ -22,4 +22,6 @@ const audioMapping = {
   decem: Decem,
 };
 
+export type LatinWord = keyof typeof audioMapping;
+
 export default audioMapping;

@@ -3,22 +3,22 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import AnimalsScreen from "./screens/AnimalsScreen";
-import ColorsScreen from "./screens/ColorsScreen";
-import HomeScreen from "./screens/HomeScreen";
-import MonthsScreen from "./screens/MonthsScreen";
-import NumbersScreen from "./screens/NumbersScreen";
+import {
+  AnimalsScreen,
+  ColorsScreen,
+  MonthsScreen,
+  NumberScreen,
+  WeekdaysScreen,
+} from "./screens/FlashcardCategoryScreen";
 import ScoreScreen from "./screens/ScoreScreen";
-import WeekdaysScreen from "./screens/WeekdaysScreen";
-// import { initializeNotifications } from "./utils/NotificationManager";
 
 export type RootStackParamList = {
-  Home: undefined;
+  Home: { category: string };
   Numbers: { category: string };
-  Animals: undefined;
-  Months: undefined;
-  Weekdays: undefined;
-  Colors: undefined;
+  Animals: { category: string };
+  Months: { category: string };
+  Weekdays: { category: string };
+  Colors: { category: string };
   Score: {
     rightAnswers: number;
     wrongAnswers: number;
@@ -28,14 +28,12 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
-  // initializeNotifications();
   return (
     <SafeAreaProvider>
       <StatusBar style="auto" backgroundColor="lavender" />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Numbers" component={NumbersScreen} />
+          <Stack.Screen name="Numbers" component={NumberScreen} />
           <Stack.Screen name="Animals" component={AnimalsScreen} />
           <Stack.Screen name="Months" component={MonthsScreen} />
           <Stack.Screen name="Weekdays" component={WeekdaysScreen} />
