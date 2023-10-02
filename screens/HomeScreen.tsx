@@ -1,11 +1,35 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { RootStackParamList } from "../App";
 
 type Props = StackScreenProps<RootStackParamList, "Home">;
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
+  const [latinTranslation, setLatinTranslation] = useState<string>("");
+  const [inputWord, setInputWord] = useState<string>("");
+
+  useEffect(() => {}, []);
+
+  const fetchLatinTranslation = () => {
+    fetch(
+      `https://www.latin-is-simple.com/api/vocabulary/search/?query=${inputWord}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // Set the fetched Latin translation in the state
+        setLatinTranslation(data[0].full_name);
+      })
+      .catch((error) => console.log(error));
+  };
+
   const navigateToScreen = (screenName: keyof RootStackParamList) => {
     switch (screenName) {
       case "Numbers":
@@ -43,6 +67,20 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Latin-To-Go</Text>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter a word to translate"
+          onChangeText={(text) => setInputWord(text)}
+          value={inputWord}
+        />
+        <TouchableOpacity
+          style={styles.translateButton}
+          onPress={fetchLatinTranslation}
+        >
+          <Text style={styles.buttonText}>Translate</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.buttonContainer}>
         {circleButtons.map((button, index) => (
           <TouchableOpacity
@@ -54,6 +92,12 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
+      {latinTranslation && (
+        <View style={styles.translationContainer}>
+          <Text style={styles.translationLabel}>Latin Translation:</Text>
+          <Text style={styles.translationText}>{latinTranslation}</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -71,6 +115,30 @@ const styles = StyleSheet.create({
     fontFamily: "serif",
     fontWeight: "bold",
   },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    marginRight: 10,
+  },
+  translateButton: {
+    backgroundColor: "#3498db",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontFamily: "serif",
+    fontWeight: "bold",
+  },
   buttonContainer: {
     alignItems: "center",
   },
@@ -82,11 +150,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
   },
-  buttonText: {
+  buttonTextAlt: {
     fontSize: 18,
     color: "white",
     fontFamily: "serif",
     fontWeight: "bold",
+  },
+  translationContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  translationLabel: {
+    fontSize: 16,
+    fontFamily: "serif",
+    fontWeight: "bold",
+  },
+  translationText: {
+    fontSize: 18,
+    fontFamily: "serif",
   },
 });
 

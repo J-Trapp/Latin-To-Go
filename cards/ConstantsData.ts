@@ -19,7 +19,7 @@ export const numberCardsData = [
 export type LatinNumberWord = (typeof numberCardsData)[number]["latin"];
 
 export const animalsCardsData = [
-  { id: 1, english: "cat", latin: "felis catus" },
+  { id: 1, english: "cat", latin: "felis" },
   { id: 2, english: "dog", latin: "canis" },
   { id: 3, english: "parrot", latin: "psittacus" },
   { id: 4, english: "horse", latin: "equus" },

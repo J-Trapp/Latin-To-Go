@@ -63,7 +63,6 @@ const ColorsScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-// Export each screen component individually
 export {
   AnimalsScreen,
   ColorsScreen,

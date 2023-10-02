@@ -10,10 +10,11 @@ import {
   NumberScreen,
   WeekdaysScreen,
 } from "./screens/FlashcardCategoryScreen";
+import HomeScreen from "./screens/HomeScreen";
 import ScoreScreen from "./screens/ScoreScreen";
 
 export type RootStackParamList = {
-  Home: { category: string };
+  Home: undefined;
   Numbers: { category: string };
   Animals: { category: string };
   Months: { category: string };
@@ -33,6 +34,7 @@ export default function App() {
       <StatusBar style="auto" backgroundColor="lavender" />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Numbers" component={NumberScreen} />
           <Stack.Screen name="Animals" component={AnimalsScreen} />
           <Stack.Screen name="Months" component={MonthsScreen} />

@@ -28,7 +28,6 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
   const [isFlipped, setIsFlipped] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  // const [sound] = useState<Audio.Sound | null>(null);
   const [, setAllAnswersCorrect] = useState(false);
 
   const playLatinWordAudio = async (latinWord: LatinWord) => {
