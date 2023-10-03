@@ -12,7 +12,6 @@ type CardType = {
   english: string;
   latin: LatinWord;
 };
-
 type FlashcardScreenProps = {
   navigation: any;
   cards: readonly CardType[];

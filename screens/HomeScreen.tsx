@@ -23,7 +23,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         // Set the fetched Latin translation in the state
         setLatinTranslation(data[0].full_name);
       })
@@ -67,20 +67,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Latin-To-Go</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter a word to translate"
-          onChangeText={(text) => setInputWord(text)}
-          value={inputWord}
-        />
-        <TouchableOpacity
-          style={styles.translateButton}
-          onPress={fetchLatinTranslation}
-        >
-          <Text style={styles.buttonText}>Translate</Text>
-        </TouchableOpacity>
-      </View>
       <View style={styles.buttonContainer}>
         {circleButtons.map((button, index) => (
           <TouchableOpacity
@@ -92,6 +78,20 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter a word to translate"
+          onChangeText={(text) => setInputWord(text)}
+          value={inputWord}
+        />
+      </View>
+      <TouchableOpacity
+        style={styles.translateButton}
+        onPress={fetchLatinTranslation}
+      >
+        <Text style={styles.buttonText}>Translate</Text>
+      </TouchableOpacity>
       {latinTranslation && (
         <View style={styles.translationContainer}>
           <Text style={styles.translationLabel}>Latin Translation:</Text>
@@ -115,6 +115,23 @@ const styles = StyleSheet.create({
     fontFamily: "serif",
     fontWeight: "bold",
   },
+  buttonContainer: {
+    alignItems: "center",
+  },
+  button: {
+    width: 200,
+    height: 50,
+    borderRadius: 75,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "white",
+    fontFamily: "serif",
+    fontWeight: "bold",
+  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -133,28 +150,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-  },
-  buttonText: {
-    color: "white",
-    fontFamily: "serif",
-    fontWeight: "bold",
-  },
-  buttonContainer: {
-    alignItems: "center",
-  },
-  button: {
-    width: 200,
-    height: 50,
-    borderRadius: 75,
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  buttonTextAlt: {
-    fontSize: 18,
-    color: "white",
-    fontFamily: "serif",
-    fontWeight: "bold",
   },
   translationContainer: {
     marginTop: 20,

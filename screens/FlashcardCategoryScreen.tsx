@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  CardType,
   animalsCardsData,
   colorsCardsData,
   monthsCardsData,
@@ -11,6 +12,11 @@ import FlashcardScreen from "../components/FlashcardScreen";
 type Props = {
   navigation: any;
   route: any;
+};
+type FlashcardScreenProps = {
+  navigation: any;
+  cards: readonly CardType[];
+  category: string;
 };
 
 const NumberScreen: React.FC<Props> = ({ navigation, route }) => {

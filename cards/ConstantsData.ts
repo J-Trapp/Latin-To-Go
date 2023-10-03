@@ -1,3 +1,13 @@
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "../App";
+
+type NavigationProps = NavigationProp<RootStackParamList>;
+
+type Props = {
+  navigation: NavigationProps;
+  route: any;
+};
+
 export type CardType = {
   id: number;
   english: string;
@@ -19,51 +29,53 @@ export const numberCardsData = [
 export type LatinNumberWord = (typeof numberCardsData)[number]["latin"];
 
 export const animalsCardsData = [
-  { id: 1, english: "cat", latin: "felis" },
+  { id: 1, english: "cat", latin: "feles" },
   { id: 2, english: "dog", latin: "canis" },
   { id: 3, english: "parrot", latin: "psittacus" },
-  { id: 4, english: "horse", latin: "equus" },
+  { id: 4, english: "horse", latin: "equs" },
   { id: 5, english: "weasel", latin: "mustella" },
-  { id: 6, english: "guinea pig", latin: "cavia porcellus" },
+  { id: 6, english: "guinea pig", latin: "cavia_porcellus" },
   { id: 7, english: "lynx", latin: "lynx" },
-  { id: 8, english: "hamster", latin: "Cricetus" },
+  { id: 8, english: "hamster", latin: "criceta" },
   { id: 9, english: "fish", latin: "piscis" },
   { id: 10, english: "elk", latin: "alces" },
 ] as const;
-export type LatinAnimalWord = (typeof animalsCardsData)[number]["latin"];
+export type LatinAnimalWord = Lowercase<
+  (typeof animalsCardsData)[number]["latin"]
+>;
 
 export const monthsCardsData = [
-  { id: 1, english: "January", latin: "Ianuarius" },
-  { id: 2, english: "February", latin: "Februarius" },
-  { id: 3, english: "March", latin: "Martius" },
-  { id: 4, english: "April", latin: "Aprilis" },
-  { id: 5, english: "May", latin: "Maius" },
-  { id: 6, english: "June", latin: "Iunius" },
-  { id: 7, english: "July", latin: "Iulius" },
-  { id: 8, english: "August", latin: "Augustus" },
-  { id: 9, english: "September", latin: "Septembris" },
-  { id: 10, english: "October", latin: "Octobris" },
-  { id: 11, english: "November", latin: "Novembris" },
-  { id: 12, english: "December", latin: "Decembris" },
+  { id: 1, english: "January", latin: "ianuarii" },
+  { id: 2, english: "February", latin: "februarius" },
+  { id: 3, english: "March", latin: "martius" },
+  { id: 4, english: "April", latin: "aprilis" },
+  { id: 5, english: "May", latin: "maius" },
+  { id: 6, english: "June", latin: "iunius" },
+  { id: 7, english: "July", latin: "iulius" },
+  { id: 8, english: "August", latin: "augustus" },
+  { id: 9, english: "September", latin: "septembris" },
+  { id: 10, english: "October", latin: "octobris" },
+  { id: 11, english: "November", latin: "novembris" },
+  { id: 12, english: "December", latin: "decembris" },
 ] as const;
 export type LatinMonthWord = (typeof monthsCardsData)[number]["latin"];
 
 export const weekdaysCardsData = [
-  { id: 1, english: "Monday", latin: "dies Lunae" },
-  { id: 2, english: "Tuesday", latin: "dies Martis" },
-  { id: 3, english: "Wednesday", latin: "dies Mercurii" },
-  { id: 4, english: "Thursday", latin: "dies Iovis" },
-  { id: 5, english: "Friday", latin: "dies Veneris" },
-  { id: 6, english: "Saturday", latin: "dies Saturni" },
-  { id: 7, english: "Sunday", latin: "dies Solis" },
+  { id: 1, english: "Monday", latin: "dies_lunae" },
+  { id: 2, english: "Tuesday", latin: "dies_martis" },
+  { id: 3, english: "Wednesday", latin: "dies_mercurii" },
+  { id: 4, english: "Thursday", latin: "dies_iovis" },
+  { id: 5, english: "Friday", latin: "dies_veneris" },
+  { id: 6, english: "Saturday", latin: "dies_saturni" },
+  { id: 7, english: "Sunday", latin: "dies_solis" },
 ] as const;
 export type LatinWeekdayWord = (typeof weekdaysCardsData)[number]["latin"];
 
 export const colorsCardsData = [
-  { id: 1, english: "red", latin: "rubeus" },
-  { id: 2, english: "blue", latin: "caerulus" },
+  { id: 1, english: "red", latin: "rubrum" },
+  { id: 2, english: "blue", latin: "caeruleum" },
   { id: 3, english: "green", latin: "viridis" },
-  { id: 4, english: "yellow", latin: "flavus" },
+  { id: 4, english: "yellow", latin: "flavum" },
   { id: 5, english: "purple", latin: "purpureus" },
   { id: 6, english: "pink", latin: "roseus" },
   { id: 7, english: "white", latin: "candidus" },
