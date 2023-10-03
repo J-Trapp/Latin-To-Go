@@ -119,43 +119,57 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <Text style={styles.categoryText}>{category}</Text>
-      <Card style={styles.card}>
-        <TouchableOpacity onPress={() => setIsFlipped(!isFlipped)}>
-          <Text style={styles.cardText}>
-            {isFlipped
-              ? cards[currentCardIndex].latin
-              : cards[currentCardIndex].english}
-          </Text>
-        </TouchableOpacity>
-        {!isFlipped && (
-          <>
-            <TouchableOpacity
-              onPress={() => playLatinWordAudio(cards[currentCardIndex].latin)}
-            >
-              <FontAwesome name="volume-up" size={24} color="black" />
-            </TouchableOpacity>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Latin translation"
-              onChangeText={(text) => {
-                const updatedAnswers = [...userAnswer];
-                updatedAnswers[currentCardIndex] = text;
-                setUserAnswer(updatedAnswers);
-              }}
-              value={userAnswer[currentCardIndex]}
-            />
-            <Button mode="contained" onPress={checkAnswer}>
-              Check
-            </Button>
-          </>
-        )}
-        {isFlipped && <Text style={styles.feedback}>{feedback}</Text>}
-        {feedback && (
+      <View style={styles.cardContainer}>
+        <Card style={styles.card}>
+          <TouchableOpacity onPress={() => setIsFlipped(!isFlipped)}>
+            <Text style={styles.cardText}>
+              {isFlipped
+                ? cards[currentCardIndex].latin
+                : cards[currentCardIndex].english}
+            </Text>
+          </TouchableOpacity>
+          {!isFlipped && (
+            <View style={styles.cardTop}>
+              <TouchableOpacity
+                onPress={() =>
+                  playLatinWordAudio(cards[currentCardIndex].latin)
+                }
+                style={styles.soundIcon}
+              >
+                <FontAwesome name="volume-up" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+          )}
+        </Card>
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Latin translation"
+          onChangeText={(text) => {
+            const updatedAnswers = [...userAnswer];
+            updatedAnswers[currentCardIndex] = text;
+            setUserAnswer(updatedAnswers);
+          }}
+          value={userAnswer[currentCardIndex]}
+        />
+      </View>
+
+      {isFlipped && feedback && (
+        <View style={styles.buttonContainer}>
           <Button mode="contained" onPress={goToNextCard}>
             Continue
           </Button>
-        )}
-      </Card>
+        </View>
+      )}
+
+      {!isFlipped && (
+        <View style={styles.buttonContainer}>
+          <Button mode="contained" onPress={checkAnswer}>
+            Check
+          </Button>
+        </View>
+      )}
     </View>
   );
 };
@@ -166,6 +180,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#D8BFD8",
+    marginTop: 0,
   },
   categoryText: {
     fontSize: 18,
@@ -173,12 +188,15 @@ const styles = StyleSheet.create({
     fontFamily: "serif",
     fontWeight: "bold",
   },
+  cardContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
   card: {
     width: 200,
     height: 300,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#ccc",
@@ -196,17 +214,39 @@ const styles = StyleSheet.create({
     fontFamily: "serif",
     fontWeight: "bold",
     textAlign: "center",
-    paddingVertical: 20,
+    paddingVertical: 50,
+  },
+  cardTop: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    zIndex: 1,
+  },
+  soundIcon: {
+    position: "absolute",
+    bottom: 0,
+    alignItems: "center",
+  },
+
+  inputContainer: {
+    justifyContent: "center",
+    marginBottom: 20,
   },
   input: {
     width: 230,
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "black",
     padding: 8,
     marginTop: 16,
     fontSize: 16,
     backgroundColor: "white",
     marginBottom: 16,
+  },
+  buttonContainer: {
+    alignItems: "center",
   },
   feedback: {
     fontSize: 18,

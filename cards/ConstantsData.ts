@@ -26,7 +26,9 @@ export const numberCardsData = [
   { id: 9, english: "nine", latin: "novem" },
   { id: 10, english: "ten", latin: "decem" },
 ] as const;
-export type LatinNumberWord = (typeof numberCardsData)[number]["latin"];
+export type LatinNumberWord = Lowercase<
+  (typeof numberCardsData)[number]["latin"]
+>;
 
 export const animalsCardsData = [
   { id: 1, english: "cat", latin: "feles" },
@@ -58,7 +60,9 @@ export const monthsCardsData = [
   { id: 11, english: "November", latin: "novembris" },
   { id: 12, english: "December", latin: "decembris" },
 ] as const;
-export type LatinMonthWord = (typeof monthsCardsData)[number]["latin"];
+export type LatinMonthWord = Lowercase<
+  (typeof monthsCardsData)[number]["latin"]
+>;
 
 export const weekdaysCardsData = [
   { id: 1, english: "Monday", latin: "dies_lunae" },
@@ -69,7 +73,9 @@ export const weekdaysCardsData = [
   { id: 6, english: "Saturday", latin: "dies_saturni" },
   { id: 7, english: "Sunday", latin: "dies_solis" },
 ] as const;
-export type LatinWeekdayWord = (typeof weekdaysCardsData)[number]["latin"];
+export type LatinWeekdayWord = Lowercase<
+  (typeof weekdaysCardsData)[number]["latin"]
+>;
 
 export const colorsCardsData = [
   { id: 1, english: "red", latin: "rubrum" },
@@ -81,7 +87,9 @@ export const colorsCardsData = [
   { id: 7, english: "white", latin: "candidus" },
   { id: 8, english: "gold", latin: "aureus" },
 ] as const;
-export type LatinColorWord = (typeof colorsCardsData)[number]["latin"];
+export type LatinColorWord = Lowercase<
+  (typeof colorsCardsData)[number]["latin"]
+>;
 
 export type LatinWord =
   | LatinNumberWord

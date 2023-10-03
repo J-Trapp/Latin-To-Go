@@ -23,8 +23,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
-        // Set the fetched Latin translation in the state
         setLatinTranslation(data[0].full_name);
       })
       .catch((error) => console.log(error));
@@ -136,20 +134,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    marginTop: 20,
   },
   input: {
     flex: 1,
     height: 40,
-    borderColor: "gray",
+    maxWidth: 200,
+    alignSelf: "center",
+    borderColor: "black",
     borderWidth: 1,
     paddingHorizontal: 10,
     marginRight: 10,
   },
   translateButton: {
-    backgroundColor: "#3498db",
-    paddingVertical: 10,
+    backgroundColor: "#FF1493",
+    paddingVertical: 15,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 30,
   },
   translationContainer: {
     marginTop: 20,
