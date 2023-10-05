@@ -11,13 +11,13 @@ const generateDeviceId = async () => {
   return deviceId;
 };
 
-const sendCongratulatoryNotification = async () => {
+const sendNotification = async (title: string, body: string) => {
   const deviceId = await generateDeviceId();
   const message = {
     to: deviceId,
     sound: "default",
-    title: "Congratulations!",
-    body: "You completed the category successfully!",
+    title: title,
+    body: body,
   };
 
   try {
@@ -30,17 +30,38 @@ const sendCongratulatoryNotification = async () => {
     console.error("Error sending push notification:", error);
   }
 };
+const sendCongratulatoryNotification = async (incorrectCount: number) => {
+  let title, body;
 
-const getCongratulatoryMessage = () => {
-  return "Congratulations! You got all the answers right in this category!";
+  if (incorrectCount === 0) {
+    title = "Congratulations!";
+    body = "You completed the category successfully!";
+  } else if (incorrectCount <= 5) {
+    title = "Good job...almost there!";
+    body = "You got some answers wrong, but you're making progress!";
+  } else {
+    title = "You have to keep practicing!";
+    body = "You got quite a few answers wrong, but don't give up!";
+  }
+
+  sendNotification(title, body);
 };
 
-const getPracticeMessage = () => {
-  return "You better practice some more to get all the answers right!";
+export const getCongratulatoryMessage = (incorrectCount: number) => {
+  let message = "";
+
+  if (incorrectCount === 0) {
+    message = "Congratulations! You completed the category successfully!";
+  } else if (incorrectCount <= 5) {
+    message = "You got some answers wrong, but you're making progress!";
+  } else {
+    message = "You got quite a few answers wrong, but don't give up!";
+  }
+
+  return message;
 };
 
 export default {
   sendCongratulatoryNotification,
   getCongratulatoryMessage,
-  getPracticeMessage,
 };

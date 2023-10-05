@@ -68,9 +68,17 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
         answer.toLowerCase() === cards[index].latin.toLowerCase()
     );
 
+    // Count the number of incorrect answers
+    const incorrectCount = userAnswer.reduce((count, answer, index) => {
+      if (answer.toLowerCase() !== cards[index].latin.toLowerCase()) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
+
     if (areAllAnswersCorrect) {
       // Send congratulatory notification and set allAnswersCorrect to true
-      NotificationManager.sendCongratulatoryNotification();
+      NotificationManager.sendCongratulatoryNotification(incorrectCount);
       setAllAnswersCorrect(true);
     }
   };
@@ -94,8 +102,11 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
           incorrectCount++;
         }
       }
+
+      // Count the number of incorrect answers
+
       if (correctCount === cards.length && incorrectCount === 0) {
-        NotificationManager.sendCongratulatoryNotification();
+        NotificationManager.sendCongratulatoryNotification(incorrectCount);
         setAllAnswersCorrect(true);
       } else {
         setAllAnswersCorrect(false);

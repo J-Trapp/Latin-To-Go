@@ -3,7 +3,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { RootStackParamList } from "../App";
-import NotificationManager from "../utils/NotificationManager";
+import NotificationManager, {
+  getCongratulatoryMessage,
+} from "../utils/NotificationManager";
 
 type ScoreScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -21,18 +23,13 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({ navigation, route }) => {
   const { rightAnswers, wrongAnswers } = route.params;
   const [showCongratulatoryMessage, setShowCongratulatoryMessage] =
     useState(false);
-  const [showPracticeMessage, setShowPracticeMessage] = useState(false);
 
   useEffect(() => {
-    // Check if the user has completed the category
-    const userCompletedCategory = rightAnswers === rightAnswers + wrongAnswers;
+    const message = getCongratulatoryMessage(wrongAnswers);
 
-    // If the user completed the category, send a congratulatory notification
-    if (userCompletedCategory) {
-      NotificationManager.sendCongratulatoryNotification();
+    if (message) {
+      NotificationManager.sendCongratulatoryNotification(wrongAnswers);
       setShowCongratulatoryMessage(true);
-    } else {
-      setShowPracticeMessage(true);
     }
   }, [rightAnswers, wrongAnswers]);
 
@@ -43,29 +40,42 @@ const ScoreScreen: React.FC<ScoreScreenProps> = ({ navigation, route }) => {
         <Text style={styles.star}>★</Text>
         <Text style={styles.star}>★</Text>
       </View>
-
       <View style={styles.scoreContainer}>
         <Text style={styles.scoreText}>Score</Text>
         <Text style={styles.scoreValue}>Right Answers: {rightAnswers}</Text>
         <Text style={styles.scoreValue}>Wrong Answers: {wrongAnswers}</Text>
       </View>
-
       {showCongratulatoryMessage && (
-        <View style={styles.congratulatoryMessageContainer}>
-          <Text style={styles.congratulatoryMessage}>
-            {NotificationManager.getCongratulatoryMessage()}
+        <View
+          style={[
+            styles.congratulatoryMessageContainer,
+            {
+              borderColor:
+                wrongAnswers === 0
+                  ? "green"
+                  : wrongAnswers <= 5
+                  ? "orange"
+                  : "red",
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.congratulatoryMessage,
+              {
+                color:
+                  wrongAnswers === 0
+                    ? "green"
+                    : wrongAnswers <= 5
+                    ? "orange"
+                    : "red",
+              },
+            ]}
+          >
+            {NotificationManager.getCongratulatoryMessage(wrongAnswers)}
           </Text>
         </View>
       )}
-
-      {showPracticeMessage && (
-        <View style={styles.practiceMessageContainer}>
-          <Text style={styles.practiceMessage}>
-            {NotificationManager.getPracticeMessage()}
-          </Text>
-        </View>
-      )}
-
       <View style={{ alignItems: "center", marginTop: 20 }}>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Text style={{ color: "yellow" }}>Go back to Home</Text>
@@ -106,7 +116,8 @@ const styles = StyleSheet.create({
   },
   congratulatoryMessageContainer: {
     marginTop: 20,
-    backgroundColor: "green",
+    backgroundColor: "black",
+    borderWidth: 2,
     padding: 10,
     borderRadius: 5,
   },
