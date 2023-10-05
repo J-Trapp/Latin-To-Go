@@ -2,7 +2,14 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
 import audioMapping, { LatinWord } from "../config/audioMapping";
 import NotificationManager from "../utils/NotificationManager";
@@ -126,68 +133,71 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
       : "lavender";
 
   return (
-    <View style={[styles.container, { backgroundColor }]}>
-      <Text style={styles.categoryText}>{category}</Text>
-      <View style={styles.cardContainer}>
-        <Card style={styles.card}>
-          <TouchableOpacity onPress={() => setIsFlipped(!isFlipped)}>
-            <Text style={styles.cardText}>
-              {isFlipped
-                ? cards[currentCardIndex].latin
-                : cards[currentCardIndex].english}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={[styles.container, { backgroundColor }]}>
+        <Text style={styles.categoryText}>{category}</Text>
+        <View style={styles.cardContainer}>
+          <Card style={styles.card}>
+            <TouchableOpacity onPress={() => setIsFlipped(!isFlipped)}>
+              <Text style={styles.cardText}>
+                {isFlipped
+                  ? cards[currentCardIndex].latin
+                  : cards[currentCardIndex].english}
+              </Text>
+            </TouchableOpacity>
+            {!isFlipped && (
+              <View style={styles.cardTop}>
+                <TouchableOpacity
+                  onPress={() =>
+                    playLatinWordAudio(cards[currentCardIndex].latin)
+                  }
+                  style={styles.soundIcon}
+                >
+                  <FontAwesome name="volume-up" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            )}
+          </Card>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.input, isFlipped && styles.disabledInput]}
+            placeholder="Enter Latin translation"
+            autoFocus={true}
+            onChangeText={(text) => {
+              if (!isFlipped) {
+                const updatedAnswers = [...userAnswer];
+                updatedAnswers[currentCardIndex] = text;
+                setUserAnswer(updatedAnswers);
+              }
+            }}
+            value={userAnswer[currentCardIndex]}
+            editable={!isFlipped}
+          />
+        </View>
+        {feedback && (
+          <View style={[styles.buttonContainer, { marginBottom: 10 }]}>
+            <Text style={styles.feedback}>
+              {feedback === "Correct!" ? "Correct!" : "Wrong!"}
             </Text>
-          </TouchableOpacity>
-          {!isFlipped && (
-            <View style={styles.cardTop}>
-              <TouchableOpacity
-                onPress={() =>
-                  playLatinWordAudio(cards[currentCardIndex].latin)
-                }
-                style={styles.soundIcon}
-              >
-                <FontAwesome name="volume-up" size={24} color="black" />
-              </TouchableOpacity>
-            </View>
-          )}
-        </Card>
+          </View>
+        )}
+        {isFlipped && (
+          <View style={styles.buttonContainer}>
+            <Button mode="contained" onPress={goToNextCard}>
+              Continue
+            </Button>
+          </View>
+        )}
+        {!isFlipped && (
+          <View style={styles.buttonContainer}>
+            <Button mode="contained" onPress={checkAnswer}>
+              Check
+            </Button>
+          </View>
+        )}
       </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.input, isFlipped && styles.disabledInput]}
-          placeholder="Enter Latin translation"
-          onChangeText={(text) => {
-            if (!isFlipped) {
-              const updatedAnswers = [...userAnswer];
-              updatedAnswers[currentCardIndex] = text;
-              setUserAnswer(updatedAnswers);
-            }
-          }}
-          value={userAnswer[currentCardIndex]}
-          editable={!isFlipped}
-        />
-      </View>
-      {feedback && (
-        <View style={[styles.buttonContainer, { marginBottom: 10 }]}>
-          <Text style={styles.feedback}>
-            {feedback === "Correct!" ? "Correct!" : "Wrong!"}
-          </Text>
-        </View>
-      )}
-      {isFlipped && (
-        <View style={styles.buttonContainer}>
-          <Button mode="contained" onPress={goToNextCard}>
-            Continue
-          </Button>
-        </View>
-      )}
-      {!isFlipped && (
-        <View style={styles.buttonContainer}>
-          <Button mode="contained" onPress={checkAnswer}>
-            Check
-          </Button>
-        </View>
-      )}
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
