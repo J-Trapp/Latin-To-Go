@@ -4,6 +4,7 @@ import * as Haptics from "expo-haptics";
 import React, { useEffect, useState } from "react";
 import {
   Keyboard,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,6 +20,7 @@ type CardType = {
   english: string;
   latin: LatinWord;
 };
+
 type FlashcardScreenComponentsProps = {
   navigation: any;
   cards: readonly CardType[];
@@ -92,11 +94,6 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
           incorrectCount++;
         }
       }
-      useEffect(() => {
-        if (isFlipped) {
-          setInputAutoFocus(true);
-        }
-      }, [isFlipped]);
 
       if (correctCount === cards.length && incorrectCount === 0) {
         NotificationManager.sendCongratulatoryNotification(incorrectCount);
@@ -117,6 +114,14 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
       : feedback === "Wrong!"
       ? "red"
       : "lavender";
+
+  useEffect(() => {
+    StatusBar.setBackgroundColor(backgroundColor);
+
+    return () => {
+      StatusBar.setBackgroundColor("lavender");
+    };
+  }, [backgroundColor]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

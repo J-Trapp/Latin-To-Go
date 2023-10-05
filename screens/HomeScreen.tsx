@@ -106,11 +106,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     paddingTop: 20,
+    paddingBottom: 20,
     backgroundColor: "lavender",
   },
   title: {
     fontSize: 24,
-    marginBottom: 10,
+    marginBottom: 20,
     fontFamily: "serif",
     fontWeight: "bold",
   },
@@ -134,8 +135,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15,
-    marginTop: 10,
+    marginBottom: 30,
+    marginTop: 20,
   },
   input: {
     flex: 1,
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   translationContainer: {
-    marginTop: 15,
+    marginTop: 10,
     alignItems: "center",
   },
   translationLabel: {
