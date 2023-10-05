@@ -1,7 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 import * as Haptics from "expo-haptics";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   StyleSheet,
@@ -35,6 +35,7 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
   const [feedback, setFeedback] = useState<string | null>(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [, setAllAnswersCorrect] = useState(false);
+  const [inputAutoFocus, setInputAutoFocus] = useState(true);
 
   const playLatinWordAudio = async (latinWord: LatinWord) => {
     try {
@@ -58,7 +59,7 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
 
   const checkAnswer = () => {
     setIsFlipped(true);
-    const currentUserAnswer = userAnswer[currentCardIndex];
+    const currentUserAnswer = userAnswer[currentCardIndex].trim();
 
     if (
       currentUserAnswer.toLowerCase() ===
@@ -69,25 +70,6 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
       setFeedback("Wrong!");
       triggerWrongAnswerVibration();
     }
-
-    const areAllAnswersCorrect = userAnswer.every(
-      (answer, index) =>
-        answer.toLowerCase() === cards[index].latin.toLowerCase()
-    );
-
-    // Count the number of incorrect answers
-    const incorrectCount = userAnswer.reduce((count, answer, index) => {
-      if (answer.toLowerCase() !== cards[index].latin.toLowerCase()) {
-        return count + 1;
-      }
-      return count;
-    }, 0);
-
-    if (areAllAnswersCorrect) {
-      // Send congratulatory notification and set allAnswersCorrect to true
-      NotificationManager.sendCongratulatoryNotification(incorrectCount);
-      setAllAnswersCorrect(true);
-    }
   };
 
   const goToNextCard = () => {
@@ -95,6 +77,7 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
       setCurrentCardIndex(currentCardIndex + 1);
       setIsFlipped(false);
       setFeedback(null);
+      setInputAutoFocus(true);
     } else {
       let correctCount = 0;
       let incorrectCount = 0;
@@ -109,8 +92,11 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
           incorrectCount++;
         }
       }
-
-      // Count the number of incorrect answers
+      useEffect(() => {
+        if (isFlipped) {
+          setInputAutoFocus(true);
+        }
+      }, [isFlipped]);
 
       if (correctCount === cards.length && incorrectCount === 0) {
         NotificationManager.sendCongratulatoryNotification(incorrectCount);
@@ -163,7 +149,7 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
           <TextInput
             style={[styles.input, isFlipped && styles.disabledInput]}
             placeholder="Enter Latin translation"
-            autoFocus={true}
+            autoFocus={inputAutoFocus}
             onChangeText={(text) => {
               if (!isFlipped) {
                 const updatedAnswers = [...userAnswer];
