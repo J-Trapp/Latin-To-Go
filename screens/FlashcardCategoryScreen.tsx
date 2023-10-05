@@ -1,27 +1,21 @@
 import React from "react";
 import {
-  CardType,
   animalsCardsData,
   colorsCardsData,
   monthsCardsData,
   numberCardsData,
   weekdaysCardsData,
 } from "../cards/ConstantsData";
-import FlashcardScreen from "../components/FlashcardScreen";
+import FlashcardScreenComponents from "../components/FlashcardScreenComponents";
 
 type Props = {
   navigation: any;
   route: any;
 };
-type FlashcardScreenProps = {
-  navigation: any;
-  cards: readonly CardType[];
-  category: string;
-};
 
 const NumberScreen: React.FC<Props> = ({ navigation, route }) => {
   return (
-    <FlashcardScreen
+    <FlashcardScreenComponents
       navigation={navigation}
       cards={numberCardsData}
       category="Numbers"
@@ -31,7 +25,7 @@ const NumberScreen: React.FC<Props> = ({ navigation, route }) => {
 
 const AnimalsScreen: React.FC<Props> = ({ navigation, route }) => {
   return (
-    <FlashcardScreen
+    <FlashcardScreenComponents
       navigation={navigation}
       cards={animalsCardsData}
       category="Animals"
@@ -41,7 +35,7 @@ const AnimalsScreen: React.FC<Props> = ({ navigation, route }) => {
 
 const MonthsScreen: React.FC<Props> = ({ navigation, route }) => {
   return (
-    <FlashcardScreen
+    <FlashcardScreenComponents
       navigation={navigation}
       cards={monthsCardsData}
       category="Months"
@@ -51,7 +45,7 @@ const MonthsScreen: React.FC<Props> = ({ navigation, route }) => {
 
 const WeekdaysScreen: React.FC<Props> = ({ navigation, route }) => {
   return (
-    <FlashcardScreen
+    <FlashcardScreenComponents
       navigation={navigation}
       cards={weekdaysCardsData}
       category="Weekdays"
@@ -61,7 +55,7 @@ const WeekdaysScreen: React.FC<Props> = ({ navigation, route }) => {
 
 const ColorsScreen: React.FC<Props> = ({ navigation, route }) => {
   return (
-    <FlashcardScreen
+    <FlashcardScreenComponents
       navigation={navigation}
       cards={colorsCardsData}
       category="Colors"

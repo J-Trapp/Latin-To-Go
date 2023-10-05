@@ -2,12 +2,16 @@
 
 Latin-To-Go
 
+## GitHub:
+
+J-Trapp / Latin-To-Go
+
 ## Beskrivning:
 
 En app för att lära sig enkla, användbara ord på Latin genom att skriva och lyssna på orden.
 På hemskärmen (HomeScreen) finns ett inputfält där användaren kan skriva in enskilda ord som översätts till Latin från ett tredje-part api som sedan skrivs ut på skämen (https://www.latin-is-simple.com). Hemskärmen består även av de olika kategorierna som finns att välja mellan.
 Klickar man sig in på en kategori så finns alltid kategorititeln synlig ovanför kortet och det finns en ljudfil till samtliga ord i appen. Skriver man i fel ord vibrerar moblien till, skärmen blir röd, ordet "Wrong!" visas och det riktiga ordet syns på kortet. Skriver du in rätt ord blir skärmen grön, ordet "Correct!" visas tillsammans med det riktiga ordet på kortet. Man trycker "Continue" för att fortsätta till nästa ord.
-När orden i en kategori tar slut så visas Poängsidan (ScoreScreen) där det visas hur många rätt och hur mång fel man har, samt får en notis antingen en grön med gratulationer om man har alla rätt eller en röd där det står att man måste öva mer. Sist finns en knapp som tar en tillbaka till Hemsidan (HomeScreen)
+När orden i en kategori tar slut så visas Poängsidan (ScoreScreen) där det visas hur många rätt och hur många fel man har, samt får en notis antingen grön med gratulationer om man har alla rätt eller en röd där det står att man måste öva mer. Sist finns en knapp som tar en tillbaka till Hemsidan (HomeScreen)
 
 ## Uppbyggnad:
 
@@ -36,11 +40,14 @@ utils-mapp med NotificationManager
 
 - Button
   Använder I FlashcardScreen.tsx för att kontrollera användarens input-ord.
+
 - TextInput
   Använder i HomeScreen.tsx för att användaren ska kunna skriva in ett ord som översätts via tredje part api.
   Använder i FlashcardScreen.tsx för att användaren ska kunna skriva i det latinska ordet.
+
 - Card
   Använder i FlashcardScreen.tsx som mitt flashcard, där engelska ordet ska stå på en sida och det latinska ordet på andra sidan och använder boolean isFlipped för att tyda vilken sida som ska visas.
+
 - TouchableOpacity
   Använder i FlashhcardScreen.tsx, HomeScreen.tsx och ScoreScreen.tsx för att ge användaren feedback när de klickar på en knapp/icon.
 

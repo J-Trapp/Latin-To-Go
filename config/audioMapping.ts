@@ -97,5 +97,4 @@ const audioMapping = {
 };
 
 export type LatinWord = keyof typeof audioMapping;
-
 export default audioMapping;

@@ -12,13 +12,13 @@ type CardType = {
   english: string;
   latin: LatinWord;
 };
-type FlashcardScreenProps = {
+type FlashcardScreenComponentsProps = {
   navigation: any;
   cards: readonly CardType[];
   category: string;
 };
 
-const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
+const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
   navigation,
   cards,
   category,
@@ -94,14 +94,12 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
           incorrectCount++;
         }
       }
-
       if (correctCount === cards.length && incorrectCount === 0) {
         NotificationManager.sendCongratulatoryNotification();
         setAllAnswersCorrect(true);
       } else {
         setAllAnswersCorrect(false);
       }
-
       navigation.navigate("Score", {
         rightAnswers: correctCount,
         wrongAnswers: incorrectCount,
@@ -144,25 +142,33 @@ const FlashcardScreen: React.FC<FlashcardScreenProps> = ({
       </View>
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, isFlipped && styles.disabledInput]}
           placeholder="Enter Latin translation"
           onChangeText={(text) => {
-            const updatedAnswers = [...userAnswer];
-            updatedAnswers[currentCardIndex] = text;
-            setUserAnswer(updatedAnswers);
+            if (!isFlipped) {
+              const updatedAnswers = [...userAnswer];
+              updatedAnswers[currentCardIndex] = text;
+              setUserAnswer(updatedAnswers);
+            }
           }}
           value={userAnswer[currentCardIndex]}
+          editable={!isFlipped}
         />
       </View>
-
-      {isFlipped && feedback && (
+      {feedback && (
+        <View style={[styles.buttonContainer, { marginBottom: 10 }]}>
+          <Text style={styles.feedback}>
+            {feedback === "Correct!" ? "Correct!" : "Wrong!"}
+          </Text>
+        </View>
+      )}
+      {isFlipped && (
         <View style={styles.buttonContainer}>
           <Button mode="contained" onPress={goToNextCard}>
             Continue
           </Button>
         </View>
       )}
-
       {!isFlipped && (
         <View style={styles.buttonContainer}>
           <Button mode="contained" onPress={checkAnswer}>
@@ -182,16 +188,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#D8BFD8",
     marginTop: 0,
   },
+
   categoryText: {
     fontSize: 18,
     marginBottom: 10,
     fontFamily: "serif",
     fontWeight: "bold",
   },
+
   cardContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 10,
   },
+
   card: {
     width: 200,
     height: 300,
@@ -209,6 +218,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+
   cardText: {
     fontSize: 24,
     fontFamily: "serif",
@@ -216,6 +226,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingVertical: 50,
   },
+
   cardTop: {
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -225,6 +236,7 @@ const styles = StyleSheet.create({
     left: 0,
     zIndex: 1,
   },
+
   soundIcon: {
     position: "absolute",
     bottom: 0,
@@ -233,8 +245,9 @@ const styles = StyleSheet.create({
 
   inputContainer: {
     justifyContent: "center",
-    marginBottom: 20,
+    marginBottom: 5,
   },
+
   input: {
     width: 230,
     borderWidth: 1,
@@ -243,17 +256,26 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 16,
     backgroundColor: "white",
-    marginBottom: 16,
+    marginBottom: 10,
   },
+
   buttonContainer: {
     alignItems: "center",
+    marginTop: 10,
   },
+
+  disabledInput: {
+    backgroundColor: "#f5f5f5",
+    borderColor: "#ccc",
+    opacity: 0.7,
+  },
+
   feedback: {
     fontSize: 18,
-    marginTop: 16,
+    marginTop: 10,
     fontFamily: "serif",
     fontWeight: "bold",
   },
 });
 
-export default FlashcardScreen;
+export default FlashcardScreenComponents;

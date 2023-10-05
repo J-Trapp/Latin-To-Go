@@ -8,7 +8,6 @@ const generateDeviceId = async () => {
     deviceId = Math.random().toString(36).substring(7);
     await AsyncStorage.setItem("device_id", deviceId);
   }
-
   return deviceId;
 };
 

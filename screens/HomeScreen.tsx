@@ -1,6 +1,7 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import {
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -63,7 +64,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   ];
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Latin-To-Go</Text>
       <View style={styles.buttonContainer}>
         {circleButtons.map((button, index) => (
@@ -96,7 +97,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.translationText}>{latinTranslation}</Text>
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -104,12 +105,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    paddingTop: 40,
+    paddingTop: 20,
     backgroundColor: "lavender",
   },
   title: {
     fontSize: 24,
-    marginBottom: 20,
+    marginBottom: 10,
     fontFamily: "serif",
     fontWeight: "bold",
   },
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 200,
-    height: 50,
+    height: 40,
     borderRadius: 75,
     justifyContent: "center",
     alignItems: "center",
@@ -133,8 +134,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
-    marginTop: 20,
+    marginBottom: 15,
+    marginTop: 10,
   },
   input: {
     flex: 1,
@@ -148,21 +149,21 @@ const styles = StyleSheet.create({
   },
   translateButton: {
     backgroundColor: "#FF1493",
-    paddingVertical: 15,
+    paddingVertical: 8,
     paddingHorizontal: 20,
-    borderRadius: 30,
+    borderRadius: 10,
   },
   translationContainer: {
-    marginTop: 20,
+    marginTop: 15,
     alignItems: "center",
   },
   translationLabel: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "serif",
     fontWeight: "bold",
   },
   translationText: {
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: "serif",
   },
 });
