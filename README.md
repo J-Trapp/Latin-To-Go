@@ -9,23 +9,25 @@ J-Trapp / Latin-To-Go
 ## Beskrivning:
 
 En app för att lära sig enkla, användbara ord på Latin genom att skriva och lyssna på orden.
-På hemskärmen (HomeScreen) finns ett inputfält där användaren kan skriva in enskilda ord som översätts till Latin från ett tredje-part api som sedan skrivs ut på skämen (https://www.latin-is-simple.com). Hemskärmen består även av de olika kategorierna som finns att välja mellan.
+På hemskärmen (HomeScreen) finns ett inputfält där användaren kan skriva in enskilda ord (på engelska) som översätts till Latin från ett tredje-part api som sedan skrivs ut på skämen (https://www.latin-is-simple.com). Hemskärmen består även av de olika kategorierna som finns att välja mellan.
 Klickar man sig in på en kategori så finns alltid kategorititeln synlig ovanför kortet och det finns en ljudfil till samtliga ord i appen. Skriver man i fel ord vibrerar moblien till, skärmen blir röd, ordet "Wrong!" visas och det riktiga ordet syns på kortet. Skriver du in rätt ord blir skärmen grön, ordet "Correct!" visas tillsammans med det riktiga ordet på kortet. Man trycker "Continue" för att fortsätta till nästa ord.
-När orden i en kategori tar slut så visas Poängsidan (ScoreScreen) där det visas hur många rätt och hur många fel man har, samt får en notis antingen grön med gratulationer om man har alla rätt eller en röd där det står att man måste öva mer. Sist finns en knapp som tar en tillbaka till Hemsidan (HomeScreen)
+När orden i en kategori tar slut så visas Poängsidan (ScoreScreen) där det visas hur många rätt och hur många fel man har, samt får en notis antingen grön, orange eller röd beroende på hur många rätt man har. Sist finns en knapp som tar en tillbaka till Hemsidan (HomeScreen)
 
 ## Uppbyggnad:
 
-Använt React native med react navigation och expo.
+Använt React native med react navigation och expo (Jag har hela tiden tetat på både emulatorn och min android-mobil.)
 assets-mapp med mp3 filer
 cards-mapp med all data
 config-mapp med ljudmappningen
 screens-mapp med de olika skärmarna
 utils-mapp med NotificationManager
+App.tsx i root-filen
 
 ## Komponenter Expo:
 
 - StatusBar från expo-status-bar
-  Använder i App.tsx med styling för att få färgen att matcha med mina skärmar.
+  Använder i App.tsx med styling för att få färgen att matcha med min färg-skala.
+  Använder den även i FlashcardScreenComponents.tsx för att ändra färgen efter skärmen
 
 - Audio från expo-av
   Använder i FlashcardScreen.tsx för att hantera mina mp3-filer så att de kan spelas upp i appen.
@@ -59,11 +61,11 @@ Krav för godkänt:
 [X] React Navigation används för att skapa en bättre upplevelse i appen.
 [X] Git & GitHub har använts
 [X] Projektmappen innehåller en README.md fil
-[] Uppgiften lämnas in i tid!
-[] Muntlig presentation är genomförd
+[X] Uppgiften lämnas in i tid!
+[X] Muntlig presentation är genomförd
 
 Krav för väl godkänt:
-[] Alla punkter för godkänt är uppfyllda
+[X] Alla punkter för godkänt är uppfyllda
 [X] Ytterligare en valfri extern modul används i projektet.
 [X] Appen ska prata med ett Web-API för att hämta data.
-[] Appen ska laseras på en Appstore (Deadline samma dag som kursen slutar)
+[X] Appen ska lanseras på en Appstore (Deadline samma dag som kursen slutar)
