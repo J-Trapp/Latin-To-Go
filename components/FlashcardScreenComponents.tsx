@@ -30,7 +30,6 @@ const playLatinWordAudio = async (latinWord: LatinWord) => {
   try {
     const latinWordWithoutUnderscore = latinWord.replace(/_/g, "");
 
-    // Assert the type of latinWordWithoutUnderscore as keyof typeof audioMapping
     const latinWordKey =
       latinWordWithoutUnderscore as keyof typeof audioMapping;
 
@@ -174,7 +173,7 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
             style={[
               styles.input,
               isFlipped && styles.disabledInput,
-              isFlipped && { color: "gray" }, // Change text color to gray when flipped
+              isFlipped && { color: "gray" },
             ]}
             placeholder={
               isFlipped ? "Click card to continue" : "Enter Latin translation"

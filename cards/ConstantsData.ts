@@ -3,11 +3,6 @@ import { RootStackParamList } from "../App";
 
 type NavigationProps = NavigationProp<RootStackParamList>;
 
-type Props = {
-  navigation: NavigationProps;
-  route: any;
-};
-
 export type CardType = {
   id: number;
   english: string;
