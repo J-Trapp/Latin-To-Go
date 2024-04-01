@@ -171,8 +171,14 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={[styles.input, isFlipped && styles.disabledInput]}
-            placeholder="Enter Latin translation"
+            style={[
+              styles.input,
+              isFlipped && styles.disabledInput,
+              isFlipped && { color: "gray" }, // Change text color to gray when flipped
+            ]}
+            placeholder={
+              isFlipped ? "Click card to continue" : "Enter Latin translation"
+            }
             autoFocus={inputAutoFocus}
             onChangeText={(text) => {
               if (!isFlipped) {
@@ -192,20 +198,18 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
             </Text>
           </View>
         )}
-        {isFlipped && (
-          <View style={styles.buttonContainer}>
-            <Button mode="contained" onPress={goToNextCard}>
-              Continue
-            </Button>
-          </View>
-        )}
-        {!isFlipped && (
-          <View style={styles.buttonContainer}>
+        <View style={styles.buttonContainer}>
+          {!feedback && !isFlipped && (
             <Button mode="contained" onPress={checkAnswer}>
               Check
             </Button>
-          </View>
-        )}
+          )}
+          {feedback && (
+            <Button mode="contained" onPress={goToNextCard}>
+              Continue
+            </Button>
+          )}
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
