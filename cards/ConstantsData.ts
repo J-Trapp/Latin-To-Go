@@ -73,6 +73,7 @@ export const weekdaysCardsData = [
   { id: 6, english: "Saturday", latin: "dies_saturni" },
   { id: 7, english: "Sunday", latin: "dies_solis" },
 ] as const;
+
 export type LatinWeekdayWord = Lowercase<
   (typeof weekdaysCardsData)[number]["latin"]
 >;

@@ -26,6 +26,25 @@ type FlashcardScreenComponentsProps = {
   cards: readonly CardType[];
   category: string;
 };
+const playLatinWordAudio = async (latinWord: LatinWord) => {
+  try {
+    const latinWordWithoutUnderscore = latinWord.replace(/_/g, "");
+
+    // Assert the type of latinWordWithoutUnderscore as keyof typeof audioMapping
+    const latinWordKey =
+      latinWordWithoutUnderscore as keyof typeof audioMapping;
+
+    if (audioMapping.hasOwnProperty(latinWordKey)) {
+      const audioPath = audioMapping[latinWordKey];
+      const { sound } = await Audio.Sound.createAsync(audioPath);
+      await sound.playAsync();
+    } else {
+      console.error(`Audio file not found for Latin word: ${latinWord}`);
+    }
+  } catch (error) {
+    console.error("Error playing audio", error);
+  }
+};
 
 const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
   navigation,
@@ -61,12 +80,12 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
 
   const checkAnswer = () => {
     setIsFlipped(true);
-    const currentUserAnswer = userAnswer[currentCardIndex].trim();
+    const currentUserAnswer = userAnswer[currentCardIndex]
+      .trim()
+      .replace(/\s+/g, "");
+    const correctAnswer = cards[currentCardIndex].latin.replace(/_/g, "");
 
-    if (
-      currentUserAnswer.toLowerCase() ===
-      cards[currentCardIndex].latin.toLowerCase()
-    ) {
+    if (currentUserAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
       setFeedback("Correct!");
     } else {
       setFeedback("Wrong!");
@@ -132,7 +151,7 @@ const FlashcardScreenComponents: React.FC<FlashcardScreenComponentsProps> = ({
             <TouchableOpacity onPress={() => setIsFlipped(!isFlipped)}>
               <Text style={styles.cardText}>
                 {isFlipped
-                  ? cards[currentCardIndex].latin
+                  ? cards[currentCardIndex].latin.replace(/_/g, " ")
                   : cards[currentCardIndex].english}
               </Text>
             </TouchableOpacity>
